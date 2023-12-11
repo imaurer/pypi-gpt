@@ -26,3 +26,4 @@ venv
 wheels/
 data/
 .DS_Store
+pypi-data.sqlite
