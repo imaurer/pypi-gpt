@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling >= 1.13.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clepy"
+description = "clepy"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Ian Maurer", email = "ian@genomoncology.com" },
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "fastapi == 0.104.1",
+    "sqlmodel == 0.0.14",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "coverage[toml]",
+    "ipython",
+]
+
+[tool.setuptools.package-data]
+clepy = ["static/*", "templates/*"]
+
+[project.urls]
+
+[tool.hatch.version]
+path = "src/clepy/__init__.py"
+
+[tool.pytest.ini_options]
+addopts = [
+  "--strict-config",
+  "--strict-markers",
+]
+xfail_strict = true
+junit_family = "xunit2"
+norecursedirs = "vendor env"
+filterwarnings = [
+]
+
+[tool.coverage.run]
+parallel = true
+source = [
+    "src",
+]
+context = '${CONTEXT}'
+omit = [
+    '__main__.py',
+    '__init__.py',
+]
+
