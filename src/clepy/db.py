@@ -1,26 +1,37 @@
 from pathlib import Path
-from sqlmodel import create_engine, Session, select, func
+from typing import Type
 
-import clepy
+from sqlmodel import create_engine, Session, select, func, SQLModel
+
+from clepy import Project
+
+_engine = None
 
 
 def get_engine():
-    db_path = Path(__file__).parent / "pypi-data.sqlite"
-    engine = create_engine(f"sqlite:///{db_path}")
-    return engine
+    global _engine
+    if _engine is None:
+        db_path = Path(__file__).parent / "pypi-data.sqlite"
+        _engine = create_engine(f"sqlite:///{db_path}")
+    return _engine
 
 
-def count_projects() -> int:
+def count_table(table: Type[SQLModel]) -> int:
     engine = get_engine()
     with Session(engine) as session:
-        statement = select(func.count()).select_from(clepy.Project)
+        statement = select(func.count()).select_from(table)
         result = session.exec(statement).one()
         return result
 
 
-def count_urls() -> int:
-    engine = get_engine()
-    with Session(engine) as session:
-        statement = select(func.count()).select_from(clepy.URL)
-        result = session.exec(statement).one()
-        return result
+def get_project(name: str, version: str) -> Project:
+    with Session(get_engine()) as session:
+        statement = select(Project).where(
+            Project.name == name,
+            Project.version == version,
+        )
+        project = session.exec(statement).first()
+
+        # todo: figure out how to handle relationships..
+        assert project.urls
+        return project

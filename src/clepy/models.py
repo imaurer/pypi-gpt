@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from sqlmodel import Field, SQLModel, Relationship
 
 
@@ -24,7 +24,7 @@ class Project(SQLModel, table=True):
     classifiers: Optional[str] = None
     requires_dist: Optional[str] = None
 
-    urls: list["URL"] = Relationship(back_populates="project")
+    urls: List["URL"] = Relationship(back_populates="project")
 
     class Config:
         unique_together = [("name", "version")]
@@ -33,9 +33,9 @@ class Project(SQLModel, table=True):
 class URL(SQLModel, table=True):
     __tablename__ = "urls"
 
-    id: int = Field(default=None, primary_key=True)  # artificial primary key
-    project_id: int = Field(foreign_key="project.id")
-    url: str
+    # id: Optional[int] = Field(default=None, primary_key=True)
+    project_id: int = Field(foreign_key="projects.id", primary_key=True)
+    url: str = Field(primary_key=True)
     upload_time: str
     package_type: Optional[str] = None
     python_version: Optional[str] = None
