@@ -1,17 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
+from clepy import Project, db
 
-app = FastAPI(
-    title="ClePy 12/11",
-    summary="Demonstration of FastAPI, Pydantic, and OpenAI GPTS.",
-    description="""
-Supports `markdown` including:
-- Bullets
-- And other things.
-    """.strip(),
-    version="0.1.0.beta12345",
-)
+app = FastAPI(title="ClePy 12/11")
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+@app.get("/{name}/{version}/")
+async def get_project(
+    name: str = Path(...),
+    version: str = Path(...),
+) -> Project:
+    return db.get_project(name, version)

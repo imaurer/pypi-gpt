@@ -1,4 +1,6 @@
+import json
 from typing import Optional, List
+from pydantic import field_serializer
 from sqlmodel import Field, SQLModel, Relationship
 
 
@@ -29,12 +31,20 @@ class Project(SQLModel, table=True):
     class Config:
         unique_together = [("name", "version")]
 
+    @field_serializer("classifiers", "requires_dist")
+    def serialize_json(self, value):
+        if isinstance(value, str):
+            return json.loads(value)
+        return value
+
 
 class URL(SQLModel, table=True):
     __tablename__ = "urls"
 
-    # id: Optional[int] = Field(default=None, primary_key=True)
-    project_id: int = Field(foreign_key="projects.id", primary_key=True)
+    project_id: int = Field(
+        foreign_key="projects.id",
+        primary_key=True,
+    )
     url: str = Field(primary_key=True)
     upload_time: str
     package_type: Optional[str] = None
