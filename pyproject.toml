@@ -30,7 +30,7 @@ dynamic = ["version"]
 test = [
     "pytest",
     "coverage[toml]",
-    "ipython",
+    "uvicorn",
 ]
 
 [tool.setuptools.package-data]
