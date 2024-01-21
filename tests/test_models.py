@@ -3,10 +3,10 @@ from clepy import db, Project, URL
 
 def test_counts():
     n_projects = db.count_table(Project)
-    assert n_projects == 5288639
+    assert n_projects == 5427132
 
     n_urls = db.count_table(URL)
-    assert n_urls == 10123064
+    assert n_urls == 10452008
 
 
 def test_get_project():

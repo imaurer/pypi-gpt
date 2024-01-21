@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 ACTIVATE = . ./activate.sh
 
 test:
@@ -10,4 +12,4 @@ sync:
 	$(ACTIVATE) && pip install --upgrade pip && pip install ".[test]"
 
 api:
-	$(ACTIVATE) && uvicorn clepy:app --reload --port 8010
+	$(ACTIVATE) && uvicorn clepy:app --host 0.0.0.0 --port 8000 
