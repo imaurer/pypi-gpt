@@ -39,24 +39,28 @@ Comment: A comment explaining the reason for the version in the requirement.
 `package==version # reason for the version`
 """
 
-from enum import StrEnum
 import re
+from enum import StrEnum
+from typing import List, Optional
+
 from pydantic import (
     BaseModel,
     Field,
     HttpUrl,
     field_validator,
 )
-from typing import List, Optional
 
 
 class SemanticVersion(BaseModel):
     major: int = Field(0, description="Major version number.")
     minor: int = Field(0, description="Minor version number.")
-    patch: int = Field(0, description="Patch version number.")
+    patch: int | None = Field(None, description="Patch version number.")
 
     def __str__(self):
-        return f"{self.major}.{self.minor}.{self.patch}"
+        if self.patch is None:
+            return f"{self.major}.{self.minor}"
+        else:
+            return f"{self.major}.{self.minor}.{self.patch}"
 
     @field_validator("major", "minor", "patch", mode="before")
     def validate_version_component(cls, v):
@@ -66,11 +70,15 @@ class SemanticVersion(BaseModel):
 
     @classmethod
     def parse_version_string(cls, version_string: str) -> "SemanticVersion":
-        pattern = r"^(\d+)\.(\d+)\.(\d+)$"
+        pattern = r"^(\d+)\.(\d+)(?:\.(\d+))?$"
         match = re.match(pattern, version_string)
         if not match:
             raise ValueError(f"Invalid version string: {version_string}")
+
         major, minor, patch = match.groups()
+        if patch is None:
+            patch = 0
+
         return cls(major=int(major), minor=int(minor), patch=int(patch))
 
 
@@ -82,15 +90,23 @@ class VersionConstraintType(StrEnum):
     LESS_THAN_OR_EQUAL = "<="
     NOT_EQUAL = "!="
     WILDCARD = "~="
+    NONE = "None"
 
 
 class VersionConstraint(BaseModel):
-    type: VersionConstraintType = Field(
+    """
+    Single version constraint.
+    Requires both a type and version.
+    If no constraints provided, use an empty list at the Requirements level.
+    Split constraints into multiple objects.
+    """
+
+    type: VersionConstraintType | None = Field(
         ...,
         description="Type of version constraint.",
     )
-    version: SemanticVersion = Field(
-        ...,
+    version: SemanticVersion | None = Field(
+        None,
         example="1.0.0",
         description="The version specified in the constraint.",
     )
@@ -113,7 +129,9 @@ class Requirement(BaseModel):
     )
     constraints: List[VersionConstraint] = Field(
         ...,
-        description="List of version constraints for the package.",
+        description="If no constraints provided, leave as an empty list. "
+        "One entry per constraint. "
+        "Split multiple constraints into multiple list items.",
         default_factory=list,
     )
     extras: List[str] = Field(
@@ -191,3 +209,10 @@ class Requirement(BaseModel):
             parts.append(f"-e {self.directory_path}")
 
         return " ".join(parts)
+
+
+class RequirementList(BaseModel):
+    requirements: List[Requirement]
+
+    def __len__(self):
+        return len(self.root)
