@@ -1,5 +1,4 @@
-#SHELL := /bin/bash
-
+SHELL := /bin/bash
 ACTIVATE = . ./activate.sh
 
 install:
