@@ -7,8 +7,6 @@ install:
 download_db:
 	wget -O ./src/pypi_gpt/pypi-data.sqlite.gz https://github.com/pypi-data/pypi-json-data/releases/download/latest/pypi-data.sqlite.gz
 	gunzip ./src/pypi_gpt/pypi-data.sqlite.gz
-
-prep_db:
 	sqlite3 ./src/pypi_gpt/pypi-data.sqlite < prep_db.sql
 
 test:
