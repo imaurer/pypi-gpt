@@ -6,6 +6,14 @@ from pypi_gpt.req_models import (
 )
 
 
+def test_no_constraints():
+    req = Requirement(
+        package="requests",
+        constraints=[],
+    )
+    assert req.generate_requirement_string() == "requests"
+
+
 def test_exact_version():
     req = Requirement(
         package="requests",

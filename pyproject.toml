@@ -23,7 +23,6 @@ classifiers = [
 dependencies = [
     "fastapi == 0.104.1",
     "sqlmodel == 0.0.14",
-    "instructor == 0.4.7",
 ]
 dynamic = ["version"]
 
