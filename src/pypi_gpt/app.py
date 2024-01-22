@@ -16,7 +16,7 @@ app = FastAPI(
     description="Demonstration of Custom GPT Action using a PyPI database.",
     version="0.1",
     root_path=f"https://{hostname}/pypi_gpt",
-    servers=[{"url": f"https://{hostname}/pypi_gpt"}]
+    servers=[{"url": f"https://{hostname}/pypi_gpt"}],
 )
 
 origins = [
@@ -35,7 +35,16 @@ app.add_middleware(
 
 @app.get("/{name}/{version}/")
 async def get_project(
-    name: str = Path(...),
-    version: str = Path(...),
+    name: str = Path(
+        ...,
+        description="Package name of module.",
+        examples=["fastapi"],
+    ),
+    version: str = Path(
+        ...,
+        description="Version of module to retrieve.",
+        examples=["0.104.1"],
+    ),
 ) -> ProjectWithURLs:
+    """Given a"""
     return db_queries.get_project(name, version)
