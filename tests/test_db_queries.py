@@ -1,16 +1,16 @@
-from clepy import db, Project, URL
+from pypi_gpt import db_queries, Project, URL
 
 
 def test_counts():
-    n_projects = db.count_table(Project)
-    assert n_projects == 5427132
-
-    n_urls = db.count_table(URL)
-    assert n_urls == 10452008
+    # counts last updated for 2024-01-22
+    n_projects = db_queries.count_table(Project)
+    assert n_projects >= 5429927
+    n_urls = db_queries.count_table(URL)
+    assert n_urls >= 10459795
 
 
 def test_get_project():
-    project = db.get_project(name="fastapi", version="0.104.1")
+    project = db_queries.get_project(name="fastapi", version="0.104.1")
 
     assert project.name == "fastapi"
     assert project.author_email == "Sebastián Ramírez <tiangolo@gmail.com>"

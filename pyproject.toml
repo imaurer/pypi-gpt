@@ -3,8 +3,8 @@ requires = ["hatchling >= 1.13.0"]
 build-backend = "hatchling.build"
 
 [project]
-name = "clepy"
-description = "clepy"
+name = "pypi_gpt"
+description = "pypi_gpt"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
@@ -23,6 +23,7 @@ classifiers = [
 dependencies = [
     "fastapi == 0.104.1",
     "sqlmodel == 0.0.14",
+    "instructor == 0.4.7",
 ]
 dynamic = ["version"]
 
@@ -34,12 +35,12 @@ test = [
 ]
 
 [tool.setuptools.package-data]
-clepy = ["static/*", "templates/*"]
+pypi_gpt = ["static/*", "templates/*"]
 
 [project.urls]
 
 [tool.hatch.version]
-path = "src/clepy/__init__.py"
+path = "src/pypi_gpt/__init__.py"
 
 [tool.pytest.ini_options]
 addopts = [

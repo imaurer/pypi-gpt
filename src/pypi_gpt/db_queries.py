@@ -3,7 +3,7 @@ from typing import Type
 
 from sqlmodel import create_engine, Session, select, func, SQLModel
 
-from clepy import Project
+from pypi_gpt import Project, ProjectWithURLs
 
 _engine = None
 
@@ -24,7 +24,7 @@ def count_table(table: Type[SQLModel]) -> int:
         return result
 
 
-def get_project(name: str, version: str) -> Project:
+def get_project(name: str, version: str) -> ProjectWithURLs:
     with Session(get_engine()) as session:
         statement = select(Project).where(
             Project.name == name,
