@@ -9,9 +9,6 @@ or the [Python Package Index (PyPI)](https://pypi.org/).
 The data used was downloaded from the [pypi-data/pypi-json-data](https://github.com/pypi-data/pypi-json-data)
 repository.
 
-If you want to efficiently parse a requirements file, you don't need this project. Instead, use
-something like [requirements-parser project](https://pypi.org/project/requirements-parser/).
-
 ## Getting Started
 
 ### Setup Environment
